@@ -1,0 +1,150 @@
+{
+  "collections": {
+    "users": {
+      "description": "User accounts (patients and researchers)",
+      "schema": {
+        "_id": "ObjectId",
+        "email": "string (unique)",
+        "passwordHash": "string",
+        "name": "string",
+        "role": "string (patient | researcher)",
+        "phoneNumber": "string",
+        "healthProfile": {
+          "conditions": ["string"],
+          "medications": ["string"],
+          "allergies": ["string"],
+          "age": "number",
+          "gender": "string"
+        },
+        "profilePhoto": "string (URL)",
+        "bio": "string",
+        "institution": "string (for researchers)",
+        "credentials": ["string"],
+        "createdAt": "Date",
+        "updatedAt": "Date",
+        "lastLogin": "Date"
+      }
+    },
+    "clinical_trials": {
+      "description": "Clinical trial information",
+      "schema": {
+        "_id": "ObjectId",
+        "trialId": "string (unique)",
+        "title": "string",
+        "description": "string",
+        "phase": "string (Phase 1, 2, 3, 4)",
+        "status": "string (recruiting, active, closed)",
+        "principalInvestigator": "ObjectId (reference to users)",
+        "institution": "string",
+        "condition": "string",
+        "intervention": "string",
+        "inclusionCriteria": ["string"],
+        "exclusionCriteria": ["string"],
+        "targetEnrollment": "number",
+        "estimatedDuration": "string",
+        "startDate": "Date",
+        "endDate": "Date",
+        "location": {
+          "city": "string",
+          "state": "string",
+          "country": "string",
+          "coordinates": {
+            "lat": "number",
+            "lng": "number"
+          }
+        },
+        "contactEmail": "string",
+        "contactPhone": "string",
+        "clinicalTrialsGovId": "string",
+        "summary": "string",
+        "createdAt": "Date",
+        "updatedAt": "Date"
+      }
+    },
+    "trial_enrollments": {
+      "description": "Patient enrollment in trials",
+      "schema": {
+        "_id": "ObjectId",
+        "patientId": "ObjectId (reference to users)",
+        "trialId": "ObjectId (reference to clinical_trials)",
+        "enrollmentDate": "Date",
+        "status": "string (enrolled, completed, withdrawn, screenfailed)",
+        "notes": "string",
+        "lastCheckIn": "Date",
+        "upcomingVisit": "Date"
+      }
+    },
+    "messages": {
+      "description": "Chat messages between patients and researchers",
+      "schema": {
+        "_id": "ObjectId",
+        "senderId": "ObjectId (reference to users)",
+        "recipientId": "ObjectId (reference to users)",
+        "trialId": "ObjectId (reference to clinical_trials)",
+        "content": "string",
+        "timestamp": "Date",
+        "read": "boolean",
+        "attachments": [
+          {
+            "url": "string",
+            "filename": "string"
+          }
+        ]
+      }
+    },
+    "voice_call_logs": {
+      "description": "VAPI voice call records",
+      "schema": {
+        "_id": "ObjectId",
+        "callId": "string (unique)",
+        "patientId": "ObjectId (reference to users)",
+        "assistantId": "string",
+        "startTime": "Date",
+        "endTime": "Date",
+        "duration": "number (seconds)",
+        "status": "string (completed, failed, missed)",
+        "transcript": "string",
+        "summary": "string",
+        "createdAt": "Date"
+      }
+    },
+    "sms_logs": {
+      "description": "SMS message logs",
+      "schema": {
+        "_id": "ObjectId",
+        "messageId": "string (unique, from Twilio)",
+        "patientId": "ObjectId (reference to users)",
+        "phoneNumber": "string",
+        "content": "string",
+        "status": "string (sent, failed, delivered)",
+        "messageType": "string (appointment, reminder, update)",
+        "trialId": "ObjectId (reference to clinical_trials)",
+        "sentAt": "Date",
+        "deliveredAt": "Date"
+      }
+    },
+    "forums": {
+      "description": "Patient community forums",
+      "schema": {
+        "_id": "ObjectId",
+        "title": "string",
+        "description": "string",
+        "category": "string (trial, condition, general)",
+        "creatorId": "ObjectId (reference to users)",
+        "posts": [
+          {
+            "postId": "ObjectId",
+            "authorId": "ObjectId",
+            "content": "string",
+            "timestamp": "Date",
+            "likes": "number",
+            "replies": "number"
+          }
+        ],
+        "members": ["ObjectId"],
+        "createdAt": "Date",
+        "updatedAt": "Date"
+      }
+    }
+  }
+}
